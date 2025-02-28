@@ -1,0 +1,97 @@
+name: 'Check Python distributions for a package'
+
+inputs:
+  artifact-name:
+    description: 'Name of the artifact containing distributions to check'
+    required: false
+    default: "Packages"
+  python-version:
+    description: "Python version"
+    required: false
+    default: "3.12"
+  package:
+    description: "Name of package to check"
+    required: true
+  extra-packages:
+    description: "Extra packages to install"
+    required: false
+    default: ""
+  typed:
+    description: "Check for py.typed file"
+    required: false
+    default: "true"
+  checks:
+    description: "Bash to run to check the package"
+    required: false
+    default: 'python -c "import $PACKAGE"'
+
+runs:
+  using: composite
+  steps:
+    - name: Retrieve distributions
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+
+    - uses: actions/setup-python@v4
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Show distributions
+      run: "ls -lahr *"
+      shell: bash
+
+    - name: Show wheel contents
+      run: unzip -l *.whl
+      shell: bash
+
+    - name: Show sdist contents
+      run: tar tzf *.tar.gz
+      shell: bash
+
+    - name: Check py.typed in wheel
+      if: inputs.typed == 'true'
+      run: unzip -l *.whl | grep ${{ inputs.package }}/py.typed
+      shell: bash
+
+    - name: Check py.typed in source dist
+      if: inputs.typed == 'true'
+      run: tar tzf *.tar.gz | grep ${{ inputs.package }}/py.typed
+      shell: bash
+
+    - name: Check LICENSE in wheel
+      run: unzip -l *.whl | grep LICENSE
+      shell: bash
+
+    - name: Check LICENSE in source dist
+      run: tar tzf *.tar.gz | grep LICENSE
+      shell: bash
+
+    - name: Check CHANGELOG in source dist
+      if: inputs.expect-changelog == 'true'
+      run: tar tzf *.tar.gz | grep CHANGELOG
+      shell: bash
+
+    - name: Install package from wheel
+      run: pip install *.whl ${{ inputs.extra-packages }}
+      shell: bash
+
+    - name: Run checks
+      run: ${{ inputs.checks }}
+      shell: bash
+      env:
+        PACKAGE: ${{ inputs.package }}
+
+    - name: Uninstall wheel
+      run: pip uninstall -y ${{ inputs.package }}
+      shell: bash
+
+    - name: Install package from source dist
+      run: pip install *.tar.gz ${{ inputs.extra-packages }}
+      shell: bash
+
+    - name: Run checks
+      run: ${{ inputs.checks }}
+      shell: bash
+      env:
+        PACKAGE: ${{ inputs.package }}
