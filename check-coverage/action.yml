@@ -1,0 +1,47 @@
+name: 'Check Code Coverage'
+
+inputs:
+  pattern:
+    description: 'pattern for coverage artifact names to check'
+    required: false
+    default: "coverage-data-*"
+  required:
+    description: "Required percentage code coverage"
+    required: false
+    default: "100"
+
+runs:
+  using: composite
+  steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          cache-dependency-glob: "**/pyproject.toml"
+
+      - name: Download coverage data
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-data-*
+          merge-multiple: true
+
+      - name: Combine coverage and fail if it's <100%.
+        shell: bash
+        run: |
+          uv tool install coverage
+
+          coverage combine
+          coverage html --skip-covered --skip-empty
+
+          # Report and write to summary.
+          coverage report --format=markdown --show-missing >> $GITHUB_STEP_SUMMARY
+
+          # Report again and fail if under 100%.
+          coverage report --fail-under=100
+
+      - name: Upload HTML report if check failed.
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-report
+          path: htmlcov
+        if: ${{ failure() }}
