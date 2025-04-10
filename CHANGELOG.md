@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0 (10 Apr 2025)
+
+- Add `check-formatting` action.
+
 ## 1.2.0 (2 Apr 2025)
 
 - Add `check-coverage` action.
