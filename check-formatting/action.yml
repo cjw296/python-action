@@ -1,0 +1,21 @@
+name: 'Check Code Formatting'
+
+runs:
+  using: composite
+  steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          cache-dependency-glob: "**/pyproject.toml"
+
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          cache-dependency-glob: "**/pyproject.toml"
+
+      - name: Check formatting is correct
+        shell: bash
+        run:  |
+          uv tool install ruff
+          ruff format --diff 
