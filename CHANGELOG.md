@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.0 (16 Apr 2025)
+
+- Allow tag format to be specified for carthorse action.
+
 ## 1.4.0 (16 Apr 2025)
 
 - Add check to ensure IDE files don't end up in `sdist`.
