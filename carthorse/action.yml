@@ -5,6 +5,10 @@ inputs:
     description: 'Just check whether a tag should be created instead of creating it'
     required: false
     default: 'false'
+  tag-format:
+    description: 'The format to use for version tags'
+    required: false
+    default: 'v{version}'
 
 outputs:
   tag:
@@ -33,6 +37,7 @@ runs:
           cat > .carthorse.yaml << 'EOL'
           carthorse:
             version-from: pyproject
+            tag-format: "{tag_format}"
             when:
               - version-not-tagged
             actions:
@@ -42,6 +47,8 @@ runs:
           if [ "${{ inputs.check }}" == "false" ]; then
             echo "    - create-tag" >> .carthorse.yaml
           fi
+
+          sed -i "s/{tag_format}/${{ inputs.tag-format }}/g" .carthorse.yaml
 
       - name: Show .carthorse.yaml
         shell: bash
