@@ -67,6 +67,9 @@ runs:
       run: tar tzf *.tar.gz | grep LICENSE
       shell: bash
 
+    - name: Check there are no IDE directories in sdist
+      run: "! tar tzf *.tar.gz | grep -E '\\.(idea|vscode|cursor|cursor-editor|aider)/'"
+      shell: bash
 
     - name: Install package from wheel
       run: pip install *.whl ${{ inputs.extra-packages }}
