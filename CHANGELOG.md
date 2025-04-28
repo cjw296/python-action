@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.1 (28 Apr 2025)
+
+- Show missing lines in the shell when `check-coverage` fails under 100% coverage.
+
 ## 1.5.0 (16 Apr 2025)
 
 - Allow tag format to be specified for carthorse action.
