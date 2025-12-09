@@ -1,15 +1,5 @@
 name: 'Check Code Coverage'
 
-inputs:
-  pattern:
-    description: 'pattern for coverage artifact names to check'
-    required: false
-    default: "coverage-data-*"
-  required:
-    description: "Required percentage code coverage"
-    required: false
-    default: "100"
-
 runs:
   using: composite
   steps:
