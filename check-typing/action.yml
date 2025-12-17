@@ -1,0 +1,21 @@
+name: 'Check Typing'
+
+inputs:
+  python-version:
+    description: 'Python version to use'
+    required: true
+
+runs:
+  using: composite
+  steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+          cache-dependency-glob: "**/pyproject.toml"
+
+      - name: Check typing
+        shell: bash
+        run: uv run --all-extras --dev mypy src tests
+      - uses: actions/checkout@v4
