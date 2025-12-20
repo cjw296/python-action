@@ -4,19 +4,18 @@ inputs:
   python-version:
     description: 'Python version to use'
     required: true
-  uv-resolution:
-    description: 'Type of uv resolution to use'
-    required: true
-  uv-extras:
-    description: 'What uv extras to install'
-    default: '--all-extras'
-  uv-groups:
-    description: 'What uv groups to install'
-    default: '--dev'
+  uv-params:
+    description: 'Params for uv'
+    default: "--all-extras --dev"
 
 runs:
   using: composite
   steps:
+      - uses: cjw296/slugify-action@v1
+        id: suffix
+        with:
+          value: ${{ inputs.uv-params }}
+
       - uses: actions/checkout@v4
 
       - name: Install uv and set the python version
@@ -24,22 +23,18 @@ runs:
         with:
           python-version: ${{ inputs.python-version }}
           cache-dependency-glob: "**/pyproject.toml"
-          cache-suffix: ${{ inputs.uv-resolution }}
-
-      - name: Install the project
-        shell: bash
-        run: uv sync --all-extras --dev --resolution ${{ inputs.uv-resolution }}
+          cache-suffix: ${{ steps.suffix.outputs.slug }}
 
       - name: Run tests
         shell: bash
         run: |
           export COVERAGE_FILE=.coverage.$GITHUB_JOB
-          uv run --all-extras --dev --resolution ${{ inputs.uv-resolution }} -m pytest --cov
+          uv run ${{ inputs.uv-params }} -m pytest --cov
 
       - name: Upload coverage data
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-data-${{ inputs.python-version }}-${{ inputs.uv-resolution }}
+          name: coverage-data-${{ inputs.python-version }}-${{ steps.suffix.outputs.slug }}
           path: .coverage.*
           include-hidden-files: true
           if-no-files-found: ignore

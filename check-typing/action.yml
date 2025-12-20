@@ -4,18 +4,27 @@ inputs:
   python-version:
     description: 'Python version to use'
     required: true
+  uv-params:
+    description: 'Params for uv'
+    default: "--all-extras --dev"
 
 runs:
   using: composite
   steps:
+      - uses: cjw296/slugify-action@v1
+        id: suffix
+        with:
+          value: ${{ inputs.uv-params }}
+
       - uses: actions/checkout@v4
 
       - uses: astral-sh/setup-uv@v5
         with:
           python-version: ${{ inputs.python-version }}
           cache-dependency-glob: "**/pyproject.toml"
+          cache-suffix: ${{ steps.suffix.outputs.slug }}`
 
       - name: Check typing
         shell: bash
-        run: uv run --all-extras --dev mypy src tests
+        run: "uv run ${{ inputs.uv-params }} mypy src tests"
       - uses: actions/checkout@v4
