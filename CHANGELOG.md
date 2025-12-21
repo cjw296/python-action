@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0 (21 Dec 2025)
+
+- Remove unused parameters to `check-coverage` action.
+- Add `check-typing` action.
+- Add `run-tests` action.
+
 ## 1.5.1 (28 Apr 2025)
 
 - Show missing lines in the shell when `check-coverage` fails under 100% coverage.
