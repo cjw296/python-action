@@ -28,7 +28,7 @@ runs:
       - name: Run tests
         shell: bash
         run: |
-          export COVERAGE_FILE=.coverage.$GITHUB_JOB
+          export COVERAGE_FILE=.coverage.${{ steps.suffix.outputs.slug }}
           uv run ${{ inputs.uv-params }} -m pytest --cov
 
       - name: Upload coverage data
