@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1 (25 Dec 2025)
+
+- Fix bug in coverage file name
+
 ## 2.0.0 (21 Dec 2025)
 
 - Remove unused parameters to `check-coverage` action.
