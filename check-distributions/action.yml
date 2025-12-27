@@ -16,6 +16,10 @@ inputs:
     description: "Extra packages to install"
     required: false
     default: ""
+  extras:
+    description: "Package extras to install (e.g., '[dev,test]')"
+    required: false
+    default: ""
   typed:
     description: "Check for py.typed file"
     required: false
@@ -72,7 +76,9 @@ runs:
       shell: bash
 
     - name: Install package from wheel
-      run: pip install *.whl ${{ inputs.extra-packages }}
+      run: |
+        WHEEL=$(ls *.whl)
+        pip install "${WHEEL}${{ inputs.extras }}" ${{ inputs.extra-packages }}
       shell: bash
 
     - name: Run checks
@@ -86,7 +92,9 @@ runs:
       shell: bash
 
     - name: Install package from source dist
-      run: pip install *.tar.gz ${{ inputs.extra-packages }}
+      run: |
+        SDIST=$(ls *.tar.gz)
+        pip install "${SDIST}${{ inputs.extras }}" ${{ inputs.extra-packages }}
       shell: bash
 
     - name: Run checks
