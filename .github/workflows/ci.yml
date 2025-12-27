@@ -98,3 +98,19 @@ jobs:
           package: test_package
           python-version: ${{ matrix.python-version }}
           typed: 'true'
+
+  test-check-distributions-with-extras:
+    needs: build-sample-package
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./check-distributions/
+        with:
+          package: test_package
+          python-version: ${{ matrix.python-version }}
+          typed: 'true'
+          extras: '[test-extra]'
