@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.1.0 (27 Dec 2025)
+
+- Remove duplicate `astral-sh/setup-uv@v5` in `check-formating` action.
+- Add `project-directory` parameter to all actions that benefit from it.
+- Factor out a `uv-run` action from `check-typing` and `run-tests`.
+- The actions now have their own CI!
+
 ## 2.0.1 (25 Dec 2025)
 
 - Fix bug in coverage file name
