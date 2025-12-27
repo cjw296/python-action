@@ -9,11 +9,6 @@ runs:
         with:
           cache-dependency-glob: "**/pyproject.toml"
 
-
-      - uses: astral-sh/setup-uv@v5
-        with:
-          cache-dependency-glob: "**/pyproject.toml"
-
       - name: Check formatting is correct
         shell: bash
         run:  |
