@@ -7,24 +7,17 @@ inputs:
   uv-params:
     description: 'Params for uv'
     default: "--all-extras --dev"
+  project-directory:
+    description: 'Directory containing pyproject.toml (useful for monorepos)'
+    default: "."
 
 runs:
   using: composite
   steps:
-      - uses: cjw296/slugify-action@v1
-        id: suffix
-        with:
-          value: ${{ inputs.uv-params }}
-
-      - uses: actions/checkout@v4
-
-      - uses: astral-sh/setup-uv@v5
+      - uses: ./uv-run/
+        id: uv-run
         with:
           python-version: ${{ inputs.python-version }}
-          cache-dependency-glob: "**/pyproject.toml"
-          cache-suffix: ${{ steps.suffix.outputs.slug }}`
-
-      - name: Check typing
-        shell: bash
-        run: "uv run ${{ inputs.uv-params }} mypy src tests"
-      - uses: actions/checkout@v4
+          uv-params: ${{ inputs.uv-params }}
+          command: "mypy src tests"
+          project-directory: ${{ inputs.project-directory }}

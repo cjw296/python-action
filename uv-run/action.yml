@@ -1,0 +1,62 @@
+name: 'Setup UV and Run Command'
+
+inputs:
+  python-version:
+    description: 'Python version to use'
+    required: true
+  uv-params:
+    description: 'Params for uv'
+    default: "--all-extras --dev"
+  command:
+    description: 'Command arguments after uv run'
+    required: true
+  uv-command:
+    description: 'Command prefix (can include environment variables). Use __SLUG__ placeholder for cache suffix.'
+    default: "uv run"
+  project-directory:
+    description: 'Directory containing pyproject.toml (useful for monorepos)'
+    default: "."
+
+outputs:
+  slug:
+    description: 'Slugified uv-params for cache keys'
+    value: ${{ steps.suffix.outputs.slug }}
+
+runs:
+  using: composite
+  steps:
+      - uses: cjw296/slugify-action@v1
+        id: suffix
+        with:
+          value: ${{ inputs.uv-params }}
+
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+          cache-dependency-glob: "**/pyproject.toml"
+          cache-suffix: ${{ steps.suffix.outputs.slug }}
+
+      - name: Setup environment
+        shell: bash
+        run: |
+          cd "${{ inputs.project-directory }}"
+          uv sync ${{ inputs.uv-params }}
+
+      - name: Versions used
+        shell: bash
+        run: |
+          cd "${{ inputs.project-directory }}"
+          uv tree
+
+      - name: Run command
+        shell: bash
+        run: |
+          cd "${{ inputs.project-directory }}"
+          SLUG="${{ steps.suffix.outputs.slug }}"
+          PYTHON_VERSION="${{ inputs.python-version }}"
+          UV_CMD="${{ inputs.uv-command }}"
+          UV_CMD="${UV_CMD//__SLUG__/$SLUG}"
+          UV_CMD="${UV_CMD//__PYTHON_VERSION__/$PYTHON_VERSION}"
+          eval "$UV_CMD ${{ inputs.command }}"
