@@ -9,6 +9,9 @@ inputs:
     description: 'The format to use for version tags'
     required: false
     default: 'v{version}'
+  project-directory:
+    description: 'Directory containing pyproject.toml (useful for monorepos)'
+    default: "."
 
 outputs:
   tag:
@@ -34,6 +37,7 @@ runs:
       - name: Write .carthorse.yaml
         shell: bash
         run: |
+          cd "${{ inputs.project-directory }}"
           cat > .carthorse.yaml << 'EOL'
           carthorse:
             version-from: pyproject
@@ -52,9 +56,13 @@ runs:
 
       - name: Show .carthorse.yaml
         shell: bash
-        run: "cat .carthorse.yaml"
+        run: |
+          cd "${{ inputs.project-directory }}"
+          cat .carthorse.yaml
 
       - name: Run carthorse
         id: carthorse
-        run: carthorse --config .carthorse.yaml
+        run: |
+          cd "${{ inputs.project-directory }}"
+          carthorse --config .carthorse.yaml
         shell: bash
