@@ -48,7 +48,7 @@ runs:
         shell: bash
         run: |
           cd "${{ inputs.project-directory }}"
-          uv tree --locked
+          uv tree
 
       - name: Run command
         shell: bash
