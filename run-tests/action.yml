@@ -20,7 +20,7 @@ runs:
           python-version: ${{ inputs.python-version }}
           uv-params: ${{ inputs.uv-params }}
           command: "-m pytest --cov"
-          uv-command: "export COVERAGE_FILE=.coverage.__PYTHON_VERSION__-__SLUG__ && uv run"
+          uv-command: "export COVERAGE_FILE=.coverage.__PYTHON_VERSION__-__SLUG__ && uv run --locked"
           project-directory: ${{ inputs.project-directory }}
 
       - name: Upload coverage data
