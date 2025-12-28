@@ -124,7 +124,7 @@ jobs:
         with:
           python-version: "3.12"
           uv-params: "--resolution lowest-direct"
-          command: "python -c 'import requests; assert requests.__version__ == \\\"2.0.0\\\"'"
+          command: "python -c 'import requests; assert requests.__version__ == \\\"2.25.0\\\"'"
           project-directory: tests/minimal-python-project
 
       - uses: ./uv-run/
