@@ -124,11 +124,11 @@ jobs:
         with:
           python-version: "3.12"
           uv-params: "--resolution lowest-direct"
-          command: "python -c 'import requests; assert requests.__version__ == \"2.0.0\", f\"Expected 2.0.0, got {requests.__version__}\"'"
+          command: "python -c 'import requests; assert requests.__version__ == \"2.0.0\"'"
           project-directory: tests/minimal-python-project
 
       - uses: ./uv-run/
         with:
           python-version: "3.12"
-          command: "python -c 'import requests; assert requests.__version__ == \"2.32.0\", f\"Expected 2.32.0, got {requests.__version__}\"'"
+          command: "python -c 'import requests; assert requests.__version__ == \"2.32.0\"'"
           project-directory: tests/minimal-python-project
