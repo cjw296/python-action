@@ -12,7 +12,7 @@ inputs:
     required: true
   uv-command:
     description: 'Command prefix (can include environment variables). Use __SLUG__ placeholder for cache suffix.'
-    default: "uv run --locked"
+    default: "uv run --frozen"
   project-directory:
     description: 'Directory containing pyproject.toml (useful for monorepos)'
     default: "."
@@ -48,7 +48,7 @@ runs:
         shell: bash
         run: |
           cd "${{ inputs.project-directory }}"
-          uv tree
+          uv tree --frozen
 
       - name: Run command
         shell: bash
