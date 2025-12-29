@@ -10,9 +10,9 @@ inputs:
   command:
     description: 'Command arguments after uv run'
     required: true
-  uv-command:
-    description: 'Command prefix (can include environment variables). Use __SLUG__ placeholder for cache suffix.'
-    default: "uv run --frozen"
+  prefix:
+    description: 'Command prefix for environment variables. Use __SLUG__ placeholder for cache suffix.'
+    default: ""
   project-directory:
     description: 'Directory containing pyproject.toml (useful for monorepos)'
     default: "."
@@ -28,7 +28,7 @@ runs:
       - uses: cjw296/slugify-action@v1
         id: suffix
         with:
-          value: ${{ inputs.uv-params }}
+          value: "${{ inputs.python-version }}-${{ inputs.uv-params }}"
 
       - uses: actions/checkout@v4
 
@@ -55,9 +55,7 @@ runs:
         run: |
           cd "${{ inputs.project-directory }}"
           SLUG="${{ steps.suffix.outputs.slug }}"
-          PYTHON_VERSION="${{ inputs.python-version }}"
-          UV_CMD="${{ inputs.uv-command }}"
-          UV_CMD="${UV_CMD//__SLUG__/$SLUG}"
-          UV_CMD="${UV_CMD//__PYTHON_VERSION__/$PYTHON_VERSION}"
-          echo "Running: $UV_CMD ${{ inputs.command }}"
-          eval "$UV_CMD ${{ inputs.command }}"
+          PREFIX="${{ inputs.prefix }}"
+          PREFIX="${PREFIX//__SLUG__/$SLUG}"
+          echo "Running: $PREFIX uv run --frozen ${{ inputs.command }}"
+          eval "$PREFIX uv run --frozen ${{ inputs.command }}"
