@@ -132,3 +132,17 @@ jobs:
           python-version: "3.12"
           command: "python -c 'import requests; assert requests.__version__ == \\\"2.31.0\\\"'"
           project-directory: tests/minimal-python-project
+
+      - uses: ./uv-run/
+        with:
+          python-version: "3.12"
+          prefix: "TEST_ENV_VAR=test_value"
+          command: "python -c 'import os; assert os.environ.get(\\\"TEST_ENV_VAR\\\") == \\\"test_value\\\"'"
+          project-directory: tests/minimal-python-project
+
+      - uses: ./uv-run/
+        with:
+          python-version: "3.12"
+          prefix: "cd ../sample-python-project && uv lock &&"
+          command: "python -c 'import os; assert os.path.basename(os.getcwd()) == \\\"sample-python-project\\\"'"
+          project-directory: tests/minimal-python-project
