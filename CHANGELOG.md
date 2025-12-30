@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.0.0 (30 Dec 2025)
+
+- Replace `uv-run`'s `uv-command` parameter with a `prefix` parameter.
+- Upgrade to `astral-sh/setup-uv@v7`.
+- Pin `uv-run` action to `v2` in `check-typing` and `run-tests`.
+- Add package extras support to `check-distributions` action.
+- Improve command visibility in GitHub Actions UI.
+- Fix bug where `project-directory` was not passed to `setup-uv`'s `working-directory` parameter.
+- Fix bug in `uv-run` action where the tree shown did not us the same `uv` resolution as the 
+  sync and run.
+
 ## 2.1.0 (27 Dec 2025)
 
 - Remove duplicate `astral-sh/setup-uv@v5` in `check-formating` action.
