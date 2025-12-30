@@ -37,6 +37,7 @@ runs:
           python-version: ${{ inputs.python-version }}
           cache-dependency-glob: "**/pyproject.toml"
           cache-suffix: ${{ steps.suffix.outputs.slug }}
+          working-directory: ${{ inputs.project-directory }}
 
       - name: Setup environment
         shell: bash

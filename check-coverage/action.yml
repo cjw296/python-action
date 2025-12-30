@@ -13,6 +13,7 @@ runs:
       - uses: astral-sh/setup-uv@v5
         with:
           cache-dependency-glob: "**/pyproject.toml"
+          working-directory: ${{ inputs.project-directory }}
 
       - name: Download coverage data
         uses: actions/download-artifact@v4
