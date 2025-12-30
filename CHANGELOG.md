@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.0 (30 Dec 2025)
+
+- Move uv-run usage to v3
+- Simplify `check-distribution` install steps so command can be seen in GitHub Actions UI.
+
 ## 3.0.0 (30 Dec 2025)
 
 - Replace `uv-run`'s `uv-command` parameter with a `prefix` parameter.
