@@ -146,3 +146,20 @@ jobs:
           prefix: "cd ../sample-python-project && uv lock &&"
           command: "python -c 'import os; assert os.path.basename(os.getcwd()) == \\\"sample-python-project\\\"'"
           project-directory: tests/minimal-python-project
+
+  all-green:
+    if: always()
+    needs:
+      - test-check-typing
+      - test-check-coverage
+      - test-carthorse
+      - test-check-formatting
+      - test-check-distributions
+      - test-check-distributions-with-extras
+      - test-uv-run
+    runs-on: ubuntu-latest
+    steps:
+      - name: Decide whether the needed jobs succeeded or failed
+        uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
