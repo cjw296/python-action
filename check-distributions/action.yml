@@ -76,9 +76,7 @@ runs:
       shell: bash
 
     - name: Install package from wheel
-      run: |
-        WHEEL=$(ls *.whl)
-        pip install "${WHEEL}${{ inputs.extras }}" ${{ inputs.extra-packages }}
+      run: pip install "$(ls *.whl)${{ inputs.extras }}" ${{ inputs.extra-packages }}
       shell: bash
 
     - name: Run checks
@@ -92,9 +90,7 @@ runs:
       shell: bash
 
     - name: Install package from source dist
-      run: |
-        SDIST=$(ls *.tar.gz)
-        pip install "${SDIST}${{ inputs.extras }}" ${{ inputs.extra-packages }}
+      run: pip install "$(ls *.tar.gz)${{ inputs.extras }}" ${{ inputs.extra-packages }}
       shell: bash
 
     - name: Run checks
