@@ -41,22 +41,17 @@ runs:
 
       - name: Setup environment
         shell: bash
-        run: |
-          cd "${{ inputs.project-directory }}"
-          uv sync ${{ inputs.uv-params }}
+        run: cd "${{ inputs.project-directory }}" && uv sync ${{ inputs.uv-params }}
 
       - name: Versions used
         shell: bash
-        run: |
-          cd "${{ inputs.project-directory }}"
-          uv tree --frozen
+        run: cd "${{ inputs.project-directory }}" && uv tree --frozen
 
       - name: Run command
         shell: bash
         run: |
+          CMD="${{ inputs.prefix }} uv run --frozen ${{ inputs.command }}"
+          CMD="${CMD//__SLUG__/${{ steps.suffix.outputs.slug }}}"
           cd "${{ inputs.project-directory }}"
-          SLUG="${{ steps.suffix.outputs.slug }}"
-          PREFIX="${{ inputs.prefix }}"
-          PREFIX="${PREFIX//__SLUG__/$SLUG}"
-          echo "Running: $PREFIX uv run --frozen ${{ inputs.command }}"
-          eval "$PREFIX uv run --frozen ${{ inputs.command }}"
+          echo "Running: $CMD"
+          eval "$CMD"
