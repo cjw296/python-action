@@ -14,7 +14,7 @@ inputs:
 runs:
   using: composite
   steps:
-      - uses: cjw296/python-action/uv-run@v2
+      - uses: cjw296/python-action/uv-run@v3
         id: uv-run
         with:
           python-version: ${{ inputs.python-version }}
