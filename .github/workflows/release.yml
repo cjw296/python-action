@@ -26,3 +26,10 @@ jobs:
       - name: Run carthorse
         run: carthorse --config .carthorse.yaml
         shell: bash
+
+      - name: Run cjw296/python-workflow CI
+        uses: peter-evans/repository-dispatch@v4
+        with:
+          token: ${{ secrets.PYTHON_WORKFLOW_CI }}
+          repository: cjw296/python-workflow
+          event-type: python-action-release
