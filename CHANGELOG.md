@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.1 (12 Aug 2024)
+
+- Pin to `hynek/build-and-inspect-python-package` v3.0.1
+
 ## 3.1.0 (30 Dec 2025)
 
 - Move uv-run usage to v3
